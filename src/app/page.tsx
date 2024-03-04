@@ -1,5 +1,8 @@
 'use client'
 
+import { PdfForm } from "@src/components/Form";
+import * as generator from '@src/generator';
+import { Typography } from "antd";
 import { PDFDocument } from "pdf-lib";
 import { useCallback, useEffect, useRef } from "react";
 import styles from "./page.module.css";
@@ -8,9 +11,15 @@ export default function Home() {
 
   const visualizer = useRef<HTMLIFrameElement>(null)
 
-  const fetchPdf = useCallback(async () => {
+  const getPdfDoc = useCallback(async () => {
     const pdfBuffer = await fetch("/pdf/amanda/v1.pdf").then((r) => r.arrayBuffer());
     const pdfDoc = await PDFDocument.load(pdfBuffer);
+
+    return pdfDoc
+  }, []);
+
+  const fetchPdf = useCallback(async () => {
+    const pdfDoc = await getPdfDoc();
 
     const mainPage = pdfDoc.getPage(0);
 
@@ -26,15 +35,23 @@ export default function Home() {
       visualizer.current.src = pdfDataUri;
     }
 
-  }, []);
+  }, [getPdfDoc]);
 
   useEffect(() => {
     fetchPdf();
   }, [fetchPdf]);
 
+  const handleSubmitForm = (values: any) => {
+    console.log(values);
+    console.log(generator.generateDefaultText(values));
+    console.log(generator.generateSignatureDate(values));
+  }
+
   return (
     <main className={styles.main}>
-      <h1>recipe generator</h1>
+      <Typography.Title level={1}>Gerador de Recibos</Typography.Title>
+
+      <PdfForm onFinish={handleSubmitForm}/>
       <iframe className={styles.description} ref={visualizer} />
       
     </main>
