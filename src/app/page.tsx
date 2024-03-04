@@ -11,6 +11,16 @@ export default function Home() {
 
   const visualizer = useRef<HTMLIFrameElement>(null)
 
+  const downloadURL = useCallback((data: string, fileName: string) => {
+    const a = document.createElement("a");
+    a.href = data;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.style.display = "none";
+    a.click();
+    a.remove();
+  }, []);
+
   const getPdfDoc = useCallback(async () => {
     const pdfBuffer = await fetch("/pdf/amanda/v1.pdf").then((r) => r.arrayBuffer());
     const pdfDoc = await PDFDocument.load(pdfBuffer);
@@ -30,6 +40,13 @@ export default function Home() {
       maxWidth: mainPage.getWidth() - 50,
     });
 
+    mainPage.drawText(`Jundiaí, 01 de fevereiro de 2024`, {
+      x: 370,
+      y: 370,
+      size: 12,
+      maxWidth: mainPage.getWidth() - 50 - 370,
+    });
+
     const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
     if (visualizer.current) {
       visualizer.current.src = pdfDataUri;
@@ -41,17 +58,55 @@ export default function Home() {
     fetchPdf();
   }, [fetchPdf]);
 
-  const handleSubmitForm = (values: any) => {
-    console.log(values);
-    console.log(generator.generateDefaultText(values));
-    console.log(generator.generateSignatureDate(values));
+  const handleSubmitForm = async (values: generator.IData, download?: boolean) => {
+
+    const defaultText = generator.generateDefaultText(values);
+    const signatureText = generator.generateSignatureDate(values);
+
+    const pdfDoc = await getPdfDoc();
+
+    const mainPage = pdfDoc.getPage(0);
+
+    mainPage.drawText(defaultText, {
+      x: 50,
+      y: 600,
+      size: 14,
+      maxWidth: mainPage.getWidth() - 50,
+    });
+
+    mainPage.drawText(signatureText, {
+      x: 370,
+      y: 370,
+      size: 12,
+      maxWidth: mainPage.getWidth() - 50 - 370,
+    });
+
+    const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
+    if (visualizer.current) {
+      visualizer.current.src = pdfDataUri;
+    }
+
+    const pdfData = await pdfDoc.save();
+    const pdfBlob = new Blob([pdfData], { type: "application/pdf" });
+
+    const url = URL.createObjectURL(pdfBlob);
+
+    if (download) {
+      downloadURL(url, 
+        `recibo-${
+          generator.pacientFirstAndLastName(values.pacient.name || "Fulano de Tal")
+        }-${
+          values.sessionDate ? values.sessionDate.split("/").join("_") : generator.currentDate()
+        }.pdf`);
+    }
+
   }
 
   return (
     <main className={styles.main}>
       <Typography.Title level={1}>Gerador de Recibos</Typography.Title>
 
-      <PdfForm onFinish={handleSubmitForm}/>
+      <PdfForm onFinish={handleSubmitForm} downloadPdf={(data) => handleSubmitForm(data, true)} />
       <iframe className={styles.description} ref={visualizer} />
       
     </main>

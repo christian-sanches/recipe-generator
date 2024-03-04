@@ -51,6 +51,13 @@ export const generateDefaultText = (data: IData): string => {
   return text;
 }
 
+export const currentDate = () => format(new Date(), "dd_MM_yyyy", { locale: ptBR });
+
+export const pacientFirstAndLastName = (name: string) => {
+  const names = name.split(" ");
+  return `${names[0]}_${names[names.length - 1]}`.toLowerCase();
+}
+
 export const generateSignatureDate = (data: IData): string => {
   let text = "";
   const currentFormattedDate = format(new Date(), "dd 'de' MMMM 'de' yyyy", { locale: ptBR });

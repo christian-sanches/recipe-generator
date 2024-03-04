@@ -3,7 +3,10 @@
 import { Button, Divider, Form, Input, Space, Switch, Typography } from "antd";
 import React from "react";
 
-export const PdfForm: React.FC<{onFinish?: (values: any) => void}> = ({onFinish}) => {
+export const PdfForm: React.FC<{
+  onFinish?: (values: any) => void;
+  downloadPdf?: (values: any) => void;
+}> = ({onFinish, downloadPdf}) => {
 
   const [formInstance] = Form.useForm();
 
@@ -54,13 +57,18 @@ export const PdfForm: React.FC<{onFinish?: (values: any) => void}> = ({onFinish}
       <Form.Item label="Usar a mesma data do atendimento" name={"signature.sameAsSessionDate".split(".")}>
         <Switch defaultChecked />
       </Form.Item>
-      <Form.Item label="Texto customizado" help="Cuidado, ao completar este campo, todo o padrão de recibo será substituido!" name="customText">
+      <Form.Item label="Texto customizado" help="Cuidado: ao preencher este campo, todo o padrão de recibo será substituido!" name="customText">
         <Input.TextArea placeholder="Caso queira fazer um recibo ou nota diferente, escreva o texto todo aqui." />
       </Form.Item>
 
       <Form.Item>
         <Space style={{marginTop: "1rem"}}>
           <Button type="primary" htmlType="submit">Gerar PDF</Button>
+          <Button type="primary" danger htmlType="reset">Limpar campos</Button>
+          {
+            downloadPdf &&
+            <Button type="default" onClick={() => downloadPdf(formInstance.getFieldsValue())}>Baixar PDF</Button>
+          }
         </Space>
       </Form.Item>
     </Form>
