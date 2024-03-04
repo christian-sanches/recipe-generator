@@ -108,6 +108,12 @@ export default function Home() {
 
       <PdfForm onFinish={handleSubmitForm} downloadPdf={(data) => handleSubmitForm(data, true)} />
       <iframe className={styles.description} ref={visualizer} />
+
+      <footer>
+        <Typography.Text>
+          Feito com 💜 por <a href="mailto:christian@fleflis.dev">Christian Sanches</a> 👨🏻‍💻
+        </Typography.Text>
+      </footer>
       
     </main>
   );
