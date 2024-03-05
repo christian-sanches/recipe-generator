@@ -24,7 +24,7 @@ export default function Home() {
 
   const getPdfDoc = useCallback(async () => {
     if (!pdfCached.current) {
-      const pdfBuffer = await fetch("/pdf/amanda/v1-min.pdf").then((r) => r.arrayBuffer());
+      const pdfBuffer = await fetch("/pdf/amanda/v1-min.pdf", {cache: "force-cache"}).then((r) => r.arrayBuffer());
       pdfCached.current = pdfBuffer;
     }
 
