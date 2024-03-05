@@ -10,6 +10,7 @@ import styles from "./page.module.css";
 export default function Home() {
 
   const visualizer = useRef<HTMLIFrameElement>(null)
+  const pdfCached = useRef<ArrayBuffer|null>(null);
 
   const downloadURL = useCallback((data: string, fileName: string) => {
     const a = document.createElement("a");
@@ -22,8 +23,12 @@ export default function Home() {
   }, []);
 
   const getPdfDoc = useCallback(async () => {
-    const pdfBuffer = await fetch("/pdf/amanda/v1.pdf").then((r) => r.arrayBuffer());
-    const pdfDoc = await PDFDocument.load(pdfBuffer);
+    if (!pdfCached.current) {
+      const pdfBuffer = await fetch("/pdf/amanda/v1-min.pdf").then((r) => r.arrayBuffer());
+      pdfCached.current = pdfBuffer;
+    }
+
+    const pdfDoc = await PDFDocument.load(pdfCached.current);
 
     return pdfDoc
   }, []);
