@@ -1,8 +1,10 @@
 "use client";
 
+import { useCallback, useEffect, useRef } from "react";
+
 import { Typography } from "antd";
 import { PDFDocument } from "pdf-lib";
-import { useCallback, useEffect, useRef } from "react";
+
 import styles from "./page.module.css";
 
 const { Text, Title } = Typography;
@@ -34,7 +36,6 @@ export default function RaquelHome() {
     if (visualizer.current) {
       visualizer.current.src = pdfDataUri;
     }
-
   }, [getPdfDoc]);
 
   useEffect(() => {

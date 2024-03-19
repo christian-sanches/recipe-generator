@@ -18,10 +18,10 @@ export default function Home() {
     >
       <Space direction="vertical">
         <Title level={2}>Gerador de recibos para psicólogas - POC</Title>
-        <Title level={5} style={{textAlign: "center"}}>
+        <Title level={5} style={{ textAlign: "center" }}>
           <Link href="/amanda">Amanda</Link>
         </Title>
-        <Title level={5} style={{textAlign: "center"}}>
+        <Title level={5} style={{ textAlign: "center" }}>
           <Link href="/raquel">Raquel</Link>
         </Title>
       </Space>

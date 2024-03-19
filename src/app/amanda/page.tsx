@@ -1,10 +1,13 @@
 "use client";
 
-import { PdfForm } from "@src/components/Form";
-import * as generator from "@src/generator";
+import { useCallback, useEffect, useRef } from "react";
+
 import { Typography } from "antd";
 import { PDFDocument } from "pdf-lib";
-import { useCallback, useEffect, useRef } from "react";
+
+import { PdfForm } from "@src/components/Form";
+import * as generator from "@src/generator";
+
 import styles from "./page.module.css";
 
 const { Text, Title } = Typography;
@@ -48,7 +51,7 @@ export default function AmandaHome() {
         y: 600,
         size: 14,
         maxWidth: mainPage.getWidth() - 50,
-      }
+      },
     );
 
     mainPage.drawText(`Jundiaí, 01 de fevereiro de 2024`, {
@@ -70,7 +73,7 @@ export default function AmandaHome() {
 
   const handleSubmitForm = async (
     values: generator.IData,
-    download?: boolean
+    download?: boolean,
   ) => {
     const defaultText = generator.generateDefaultText(values);
     const signatureText = generator.generateSignatureDate(values);
@@ -107,12 +110,12 @@ export default function AmandaHome() {
       downloadURL(
         url,
         `recibo-${generator.pacientFirstAndLastName(
-          values.pacient.name || "Fulano de Tal"
+          values.pacient.name || "Fulano de Tal",
         )}-${
           values.sessionDate
             ? values.sessionDate.split("/").join("_")
             : generator.currentDate()
-        }.pdf`
+        }.pdf`,
       );
     }
   };
