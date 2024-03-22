@@ -16,16 +16,6 @@ export default function AmandaHome() {
   const visualizer = useRef<HTMLIFrameElement>(null);
   const pdfCached = useRef<ArrayBuffer | null>(null);
 
-  const downloadURL = useCallback((data: string, fileName: string) => {
-    const a = document.createElement("a");
-    a.href = data;
-    a.download = fileName;
-    document.body.appendChild(a);
-    a.style.display = "none";
-    a.click();
-    a.remove();
-  }, []);
-
   const getPdfDoc = useCallback(async () => {
     if (!pdfCached.current) {
       const pdfBuffer = await fetch("/pdf/amanda/v1-min.pdf", {
@@ -72,7 +62,7 @@ export default function AmandaHome() {
   }, [fetchPdf]);
 
   const handleSubmitForm = async (
-    values: generator.IData,
+    values: generator.IAmandaData,
     download?: boolean,
   ) => {
     const defaultText = generator.generateDefaultText(values);
@@ -107,7 +97,7 @@ export default function AmandaHome() {
     const url = URL.createObjectURL(pdfBlob);
 
     if (download) {
-      downloadURL(
+      generator.downloadURL(
         url,
         `recibo-${generator.pacientFirstAndLastName(
           values.pacient.name || "Fulano de Tal",

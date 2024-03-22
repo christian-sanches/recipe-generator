@@ -8,18 +8,6 @@ const { Title } = Typography;
 const { Item, useForm } = Form;
 const { TextArea } = Input;
 
-/**
- * Return list of months
- * 🌍 localeName   : name of local, f.e. en-GB, default es-MX
- *  ✅ monthFormat : short, numeric, long (Default)
- */
-export function monthsForLocale(localeName = "pt-BR") {
-  const format = new Intl.DateTimeFormat(localeName, { month: "long" }).format;
-  return Array.from({ length: 12 }).map((_, m) =>
-    format(new Date(Date.UTC(2021, (m + 1) % 12))),
-  );
-}
-
 export interface ICommonPdfFormProps {
   onFinish?: (values: any) => void;
   downloadPdf?: (values: any) => void;
@@ -135,16 +123,19 @@ export const RaquelPdfForm: React.FC<ICommonPdfFormProps> = ({
         <Input placeholder="Ex.: Fulano de Tal da Silva" />
       </Item>
       <Item label="Valor em R$" name="value">
-        <Input placeholder="Ex.: 150,99" />
+        <Input placeholder="Padrão: 200,00" />
       </Item>
       <Item label="Valor por extenso" name="valueInWords">
-        <Input placeholder="Ex.: Cento e Cinquenta reais e noventa e nove centavos" />
+        <Input placeholder="Padrão: Duzentos reais" />
       </Item>
       <Item label="Data de Atendimento" name="sessionDate">
-        <Input type="date" placeholder="Ex.: 01/01/2022" />
+        <Input placeholder="Ex.: 01/01/2022" />
       </Item>
       <Item label="Cidade" name={"signature.city".split(".")}>
-        <Input placeholder="Ex.: Jundiaí" />
+        <Input placeholder="Padrão: Jundiaí" />
+      </Item>
+      <Item label="Descrição" name="description">
+        <TextArea placeholder="Ex.: Atendimento psicológico no mês de Janeiro, no dia 01/01/2024" />
       </Item>
       <Item>
         <Space style={{ marginTop: "1rem" }}>
