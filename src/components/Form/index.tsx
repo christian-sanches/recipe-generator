@@ -1,16 +1,22 @@
 "use client";
 
-import { Button, Divider, Form, Input, Space, Switch, Typography } from "antd";
 import React from "react";
+
+import { Button, Divider, Form, Input, Space, Switch, Typography } from "antd";
 
 const { Title } = Typography;
 const { Item, useForm } = Form;
 const { TextArea } = Input;
 
-export const PdfForm: React.FC<{
+export interface ICommonPdfFormProps {
   onFinish?: (values: any) => void;
   downloadPdf?: (values: any) => void;
-}> = ({ onFinish, downloadPdf }) => {
+}
+
+export const AmandaPdfForm: React.FC<ICommonPdfFormProps> = ({
+  onFinish,
+  downloadPdf,
+}) => {
   const [formInstance] = useForm();
 
   return (
@@ -75,6 +81,62 @@ export const PdfForm: React.FC<{
         <TextArea placeholder="Caso queira fazer um recibo ou nota diferente, escreva o texto todo aqui." />
       </Item>
 
+      <Item>
+        <Space style={{ marginTop: "1rem" }}>
+          <Button type="primary" htmlType="submit">
+            Gerar PDF
+          </Button>
+          <Button type="primary" danger htmlType="reset">
+            Limpar campos
+          </Button>
+          {downloadPdf && (
+            <Button
+              type="default"
+              onClick={() => downloadPdf(formInstance.getFieldsValue())}
+            >
+              Baixar PDF
+            </Button>
+          )}
+        </Space>
+      </Item>
+    </Form>
+  );
+};
+
+export const RaquelPdfForm: React.FC<ICommonPdfFormProps> = ({
+  downloadPdf,
+  onFinish,
+}) => {
+  const [formInstance] = useForm();
+
+  return (
+    <Form
+      layout="vertical"
+      form={formInstance}
+      onFinish={onFinish}
+      style={{
+        width: "40%",
+        minWidth: "350px",
+      }}
+    >
+      <Item label="Nome do Paciente" name={"pacient.name".split(".")}>
+        <Input placeholder="Ex.: Fulano de Tal da Silva" />
+      </Item>
+      <Item label="Valor em R$" name="value">
+        <Input placeholder="Padrão: 200,00" />
+      </Item>
+      <Item label="Valor por extenso" name="valueInWords">
+        <Input placeholder="Padrão: Duzentos reais" />
+      </Item>
+      <Item label="Data de Atendimento" name="sessionDate">
+        <Input placeholder="Ex.: 01/01/2022" />
+      </Item>
+      <Item label="Cidade" name={"signature.city".split(".")}>
+        <Input placeholder="Padrão: Jundiaí" />
+      </Item>
+      <Item label="Descrição" name="description">
+        <TextArea placeholder="Ex.: Atendimento psicológico no mês de Janeiro, no dia 01/01/2024" />
+      </Item>
       <Item>
         <Space style={{ marginTop: "1rem" }}>
           <Button type="primary" htmlType="submit">
