@@ -45,28 +45,32 @@ export const generateDefaultText = (data: IData): string => {
   text += data.pacient.cpf || "000.000.000-00";
   text += " o valor de R$";
   text += data.value || "1,99";
-  text += " referente aos atendimentos de psicoterapia realizados nos dias:\n \n";
+  text +=
+    " referente aos atendimentos de psicoterapia realizados nos dias:\n \n";
   text += data.sessionDate || new Date().toLocaleDateString("pt-BR");
 
   return text;
-}
+};
 
-export const currentDate = () => format(new Date(), "dd_MM_yyyy", { locale: ptBR });
+export const currentDate = () =>
+  format(new Date(), "dd_MM_yyyy", { locale: ptBR });
 
 export const pacientFirstAndLastName = (name: string) => {
   const names = name.split(" ");
   return `${names[0]}_${names[names.length - 1]}`.toLowerCase();
-}
+};
 
 export const generateSignatureDate = (data: IData): string => {
   let text = "";
-  const currentFormattedDate = format(new Date(), "dd 'de' MMMM 'de' yyyy", { locale: ptBR });
+  const currentFormattedDate = format(new Date(), "dd 'de' MMMM 'de' yyyy", {
+    locale: ptBR,
+  });
 
   text += data.signature.city || "Jundiaí";
   text += ", ";
-  text += data.signature.sameAsSessionDate ?
-    data.sessionDate || currentFormattedDate :
-    data.signature.date || currentFormattedDate;
+  text += data.signature.sameAsSessionDate
+    ? data.sessionDate || currentFormattedDate
+    : data.signature.date || currentFormattedDate;
 
-  return text
-}
+  return text;
+};

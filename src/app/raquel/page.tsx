@@ -5,6 +5,8 @@ import { useCallback, useEffect, useRef } from "react";
 import { Typography } from "antd";
 import { PDFDocument } from "pdf-lib";
 
+import { RaquelPdfForm } from "@src/components/Form";
+
 import styles from "./page.module.css";
 
 const { Text, Title } = Typography;
@@ -46,6 +48,7 @@ export default function RaquelHome() {
     <main className={styles.main}>
       <Title level={1}>Gerador de Recibos - Raquel</Title>
 
+      <RaquelPdfForm onFinish={console.log} downloadPdf={console.log} />
       <iframe className={styles.description} ref={visualizer} />
 
       <footer>

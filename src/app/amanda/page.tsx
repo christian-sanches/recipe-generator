@@ -5,7 +5,7 @@ import { useCallback, useEffect, useRef } from "react";
 import { Typography } from "antd";
 import { PDFDocument } from "pdf-lib";
 
-import { PdfForm } from "@src/components/Form";
+import { AmandaPdfForm } from "@src/components/Form";
 import * as generator from "@src/generator";
 
 import styles from "./page.module.css";
@@ -124,7 +124,7 @@ export default function AmandaHome() {
     <main className={styles.main}>
       <Title level={1}>Gerador de Recibos - Amanda</Title>
 
-      <PdfForm
+      <AmandaPdfForm
         onFinish={handleSubmitForm}
         downloadPdf={(data) => handleSubmitForm(data, true)}
       />
